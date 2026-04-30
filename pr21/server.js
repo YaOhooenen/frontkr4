@@ -7,13 +7,13 @@ app.use(express.json());
 const redisClient = redis.createClient({ url: "redis://localhost:6379" });
 redisClient.connect().then(() => console.log("✅ Redis connected"));
 
-// ----- Данные в памяти (без БД) -----
+
 let users = [
     { id: "1", name: "Анна", email: "anna@example.com" },
     { id: "2", name: "Иван", email: "ivan@example.com" }
 ];
 
-// ----- Утилита кэша -----
+
 async function getOrSetCache(key, ttl, fetchFn) {
     const cached = await redisClient.get(key);
     if (cached) {
@@ -26,7 +26,7 @@ async function getOrSetCache(key, ttl, fetchFn) {
     return { source: "server", data };
 }
 
-// ----- Маршруты с кэшем -----
+
 app.get("/api/users", async (req, res) => {
     const result = await getOrSetCache("users:all", 60, async () =>
         users.map(u => ({ id: u.id, name: u.name, email: u.email }))
@@ -43,7 +43,7 @@ app.get("/api/users/:id", async (req, res) => {
     res.json(result);
 });
 
-// ----- Очистка кэша при изменении данных -----
+
 app.post("/api/users", async (req, res) => {
     const newUser = { id: String(users.length + 1), ...req.body };
     users.push(newUser);

@@ -6,4 +6,4 @@ app.get("/", (req, res) => {
     res.json({ message: `Response from server ${PORT}` });
 });
 
-app.listen(PORT, () => console.log(`Backend running on ${PORT}`));
+app.listen(PORT, () => console.log(`✅ Backend running on ${PORT}`));
